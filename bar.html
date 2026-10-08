@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Seaside · Bar board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#2E4272;--navy-deep:#1F2E4F;--cream:#F4EFE4;--paper:#FBF8F1;
+--gold:#C9B285;--ink:#1A2440;--muted:#6B7590;--line:rgba(46,66,114,.16);--warn:#A8443A}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased;padding-bottom:40px}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.wrap{max-width:640px;margin:0 auto;padding:0 20px}
+.hidden{display:none!important}
+header{background:var(--navy);color:var(--cream);padding:22px 0}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px}
+.brand{font-family:'Cormorant Garamond',serif;font-size:26px;line-height:1}
+.brand small{display:block;font-family:Inter;font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-top:5px}
+.role{text-align:right;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+.role b{display:block;font-family:'Cormorant Garamond',serif;font-size:26px;letter-spacing:0;color:var(--cream);text-transform:none;font-weight:500;margin-top:3px}
+.filters{display:flex;gap:7px;margin-top:18px;flex-wrap:wrap}
+.filters button{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:7px 12px;border:1px solid rgba(244,239,228,.35);color:rgba(244,239,228,.75)}
+.filters button[aria-pressed="true"]{background:var(--cream);color:var(--navy);border-color:var(--cream)}
+.strip{background:var(--navy-deep);color:var(--cream);padding:11px 0;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+.strip .r{display:flex;justify-content:space-between}
+.ticket{background:var(--paper);border:1px solid var(--line);border-left:3px solid var(--navy);padding:15px 16px;margin-top:12px}
+.ticket.clean{border-left-color:var(--gold)}
+.ticket.nudge{border-left-color:var(--warn);background:#FBF2F0}
+.ticket.ack{opacity:.62}
+.th{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.tn{font-family:'Cormorant Garamond',serif;font-size:30px;line-height:1}
+.tn small{font-family:Inter;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:2px}
+.tm{font-size:10.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-align:right}
+.age{display:block;font-family:'Cormorant Garamond',serif;font-size:19px;letter-spacing:0;text-transform:none;color:var(--ink);margin-top:2px}
+.age.late{color:var(--warn)}
+.alrg{margin-top:11px;padding:9px 11px;background:#FBF2F0;border-left:2px solid var(--warn);font-size:12.5px;color:var(--warn);font-weight:600}
+ul{list-style:none;margin:11px 0 0;padding:0;font-size:14.5px}
+ul li{display:flex;gap:10px;padding:4px 0}
+ul li .q{color:var(--navy);font-weight:600;min-width:22px}
+.o{display:block;font-size:12.5px;color:var(--muted)}
+.n{display:block;font-size:13px;color:var(--warn);font-weight:600;margin-top:3px;padding:6px 9px;background:#FBF2F0;border-left:2px solid var(--warn);line-height:1.4}
+.reqcount{margin-top:11px;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--warn)}
+.chg{margin-top:8px;padding:10px 11px;background:var(--cream);border:1px solid var(--line)}
+.chg .cl{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.crow{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.quick{padding:8px 11px;border:1px solid var(--line);font-size:12px;font-weight:600;white-space:nowrap}
+.camt{width:76px;padding:8px 9px;border:1px solid var(--line);background:var(--paper);font-size:14px;font-family:inherit}
+.capply{padding:9px 14px;border:1px solid var(--navy);background:var(--navy);color:var(--cream);font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase}
+.cdone{margin-top:8px;font-size:12px;font-weight:600;color:var(--navy)}
+.acts button:disabled{opacity:.35}
+.acts{display:flex;gap:8px;margin-top:14px}
+.acts button{flex:1;padding:11px;font-size:11px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;border:1px solid var(--navy)}
+.acts .prim{background:var(--navy);color:var(--cream)}
+.empty{text-align:center;padding:70px 20px;color:var(--muted)}
+.empty b{display:block;font-family:'Cormorant Garamond',serif;font-size:23px;color:var(--ink);font-weight:500;margin-bottom:8px}
+.empty p{margin:0;font-size:13.5px;line-height:1.6}
+.tools{margin-top:32px;padding-top:16px;border-top:1px solid var(--line)}
+.tools .lbl{font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.tools .row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.tools button{padding:9px 14px;font-size:11px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;border:1px solid var(--line);color:var(--muted)}
+.foot{font-size:11.5px;color:var(--muted);text-align:center;padding:26px 0 0;line-height:1.6}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="top">
+    <div class="brand">Seaside<small>Beach bar · demo</small></div>
+    <div class="role">Station<b>Bar</b></div>
+  </div>
+  <div class="filters">
+    <button data-f="all" aria-pressed="true">All</button>
+    <button data-f="order" aria-pressed="false">Orders</button>
+    <button data-f="clean" aria-pressed="false">Clearing</button>
+  </div>
+</div></header>
+ 
+<div class="strip"><div class="wrap"><div class="r"><span id="count">0 open</span><span id="clock">--:--</span></div></div></div>
+ 
+<div class="wrap">
+  <div id="board"></div>
+  <div class="empty" id="empty"><b>Nothing waiting.</b>
+    <p>Tickets appear the moment a guest sends one.<br>Open the menu page in another tab on this site.</p></div>
+  <div class="tools">
+    <div class="lbl">Demo controls</div>
+    <div class="row"><button id="seed">Load sample tickets</button><button id="clearall">Clear board</button></div>
+  </div>
+  <p class="foot">Every ticket carries its umbrella number.<br>Demo · not a real venue</p>
+</div>
+ 
+<script>
+let T=[], filter='all';
+const $=id=>document.getElementById(id);
+const hhmm=d=>String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+const mins=iso=>Math.floor((Date.now()-new Date(iso))/60000);
+ 
+function render(){
+  const list=T.filter(t=> filter==='all' || (filter==='clean' ? (t.kind==='clean'||t.kind==='nudge') : t.kind===filter));
+  $('empty').classList.toggle('hidden',list.length>0);
+  $('board').innerHTML=list.map(t=>{
+    const m=mins(t.time), late=m>=6;
+    let body='';
+    if(t.kind==='clean') body='<ul><li><span class="q">&rarr;</span> Collect empty plates and glasses</li></ul>';
+    else if(t.kind==='nudge') body='<ul><li><span class="q">!</span> Guest is still waiting to be cleared</li></ul>';
+    else body='<ul>'+t.lines.map((l,li)=>{
+      const req = l.note ? (
+        l.decided===undefined
+        ? `<div class="chg"><div class="cl">What should this cost?</div>
+             <div class="crow">
+               <button class="quick" data-set="${t.n}|${li}|0">No charge</button>
+               <button class="quick" data-set="${t.n}|${li}|2">+ 2 &euro;</button>
+               <button class="quick" data-set="${t.n}|${li}|5">+ 5 &euro;</button>
+               <input class="camt" type="number" min="0" step="0.5" inputmode="decimal" placeholder="&euro;" data-amt="${t.n}|${li}">
+               <button class="capply" data-apply="${t.n}|${li}">Apply</button>
+             </div></div>`
+        : `<div class="cdone">${l.decided>0?('Charged + '+l.decided+' \u20ac \u00b7 shown on the guest tab'):'No charge'}</div>`) : '';
+      return `<li><span class="q">${l.q}\u00d7</span> <span>${l.name}${l.opts&&l.opts.length?`<span class="o">${l.opts.join(' · ')}</span>`:''}${l.note?`<span class="n">▲ ${l.note}</span>`:''}${req}</span></li>`;
+    }).join('')+'</ul>';
+    const al = t.allergy ? `<div class="alrg">Allergies: ${[...(t.allergy.list||[]),t.allergy.other].filter(Boolean).join(', ')}</div>` : '';
+    const label = t.kind==='clean'?'Clear table':(t.kind==='nudge'?'Reminder':'Order '+t.n);
+    const nreq = t.kind==='order' ? t.lines.filter(l=>l.note).length : 0;
+    const pend = t.kind==='order' ? t.lines.filter(l=>l.note&&l.decided===undefined).length : 0;
+    const rq = nreq ? `<div class="reqcount">${nreq} special request${nreq>1?'s':''}${pend?(' · '+pend+' still to price'):' · priced'}</div>` : '';
+    return `<div class="ticket ${t.kind==='clean'?'clean':''} ${t.kind==='nudge'?'nudge':''} ${t.ack?'ack':''}">
+      <div class="th"><div class="tn"><small>Umbrella</small>${t.umbrella}</div>
+      <div class="tm">${label}<span class="age ${late?'late':''}">${m}\u2032</span></div></div>
+      ${al}${rq}${body}
+      <div class="acts">${t.ack?'':`<button data-ack="${t.n}">Taken</button>`}
+      <button class="prim" data-done="${t.n}" ${pend?'disabled':''}>${t.kind==='order'?'Delivered':'Cleared'}</button></div></div>`;
+  }).join('');
+  $('count').textContent=`${T.length} open · ${T.filter(t=>!t.ack).length} unclaimed`;
+}
+function tick(){$('clock').textContent=hhmm(new Date());render();}
+ 
+let CH=null; try{CH=new BroadcastChannel('beachbar');}catch(e){}
+if(CH) CH.onmessage=e=>{T.unshift(Object.assign({ack:false},e.data));render();};
+ 
+document.addEventListener('click',e=>{
+  const f=e.target.closest('[data-f]');
+  if(f){filter=f.dataset.f;document.querySelectorAll('[data-f]').forEach(b=>b.setAttribute('aria-pressed',b===f));render();return;}
+  const a=e.target.closest('[data-ack]');
+  if(a){const t=T.find(x=>x.n===a.dataset.ack); if(t)t.ack=true; render(); return;}
+  const d=e.target.closest('[data-done]');
+  if(d){T=T.filter(x=>x.n!==d.dataset.done); render(); return;}
+  const q=e.target.closest('[data-set]');
+  if(q){const p=q.dataset.set.split('|'); setCharge(p[0],+p[1],+p[2]); return;}
+  const ap=e.target.closest('[data-apply]');
+  if(ap){const p=ap.dataset.apply.split('|');
+    const box=document.querySelector('[data-amt="'+p[0]+'|'+p[1]+'"]');
+    const v=parseFloat(box&&box.value);
+    if(!isFinite(v)||v<0){ if(box) box.focus(); return; }
+    setCharge(p[0],+p[1],v); return;}
+});
+function setCharge(n,li,amt){
+  const t=T.find(x=>x.n===n); if(!t)return;
+  const l=t.lines[li]; l.decided=amt;
+  if(amt>0 && CH) CH.postMessage({kind:'charge',umbrella:t.umbrella,lid:l.lid||(n+'-'+li),amount:amt,note:l.note});
+  render();
+}
+$('seed').onclick=()=>{
+  const now=Date.now();
+  T=[{kind:'order',umbrella:605,n:'605-1',time:new Date(now-90e3).toISOString(),ack:false,
+      allergy:{list:['Crustaceans','Nuts'],other:''},
+      lines:[{lid:'605-s0',q:2,name:'Freddo espresso',opts:['Medium','Extra espresso shot'],note:''},
+             {lid:'605-s1',q:1,name:'Rib-eye, 280 gr',opts:['Medium rare','French fries'],note:'No chimichurri, sauce on the side'}]},
+     {kind:'nudge',umbrella:214,n:'214-4',time:new Date(now-1*60e3).toISOString(),ack:false},
+     {kind:'clean',umbrella:214,n:'214-3',time:new Date(now-12*60e3).toISOString(),ack:false},
+     {kind:'order',umbrella:118,n:'118-2',time:new Date(now-7*60e3).toISOString(),ack:true,
+      lines:[{q:1,name:'Mojito',opts:['Extra strong'],note:''},{q:2,name:'Alfa Retro',opts:[],note:'Very cold, no glasses'}]}];
+  render();
+};
+$('clearall').onclick=()=>{T=[];render();};
+tick(); setInterval(tick,15000);
+</script>
+</body>
+</html>

@@ -1,0 +1,535 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+<meta charset="utf-8"> 
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Seaside ~ Umbrella 605 </title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style> 
+:root{--navy: #2E4272; --navy-deep:#1F2E4F;--cream:#F4EFE4;--paper:#FBF8F1;
+--gold:#C9B285;--ink:#1A2440;--muted:#6B7590;--line:rgba(46, 66, 114, .16); --warn:#A8443A}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:Inter,system-ui,sans-serif;
+font-size:16px;line-height:1.45;padding-bottom:calc(96px + env(safe-area-inset-bottom));-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+input, textarea{font:inherit;color:inherit}
+.wrap{max-width:560px;margin:0 auto;padding:0 20px}
+.hidden{display:none!important}
+
+#gate{position:fixed;inset:0;z-index:100;background:var(--navy); color:var(--cream);overflow-y:auto;-webkit-overflow-scrolling:touch}
+#gate .in{max-width:560px; margin:0 auto;padding:38px 20px calc(40px + env(safe-area-inset-bottom))}
+#gate .bd{font-family:'Cormorant Garamond', serif;font-size:32px;line-height:1}
+#gate .bd small{display:block;font-family:Inter;font-size:9px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);margin-top:6px}
+#gate h1{font-family:'Cormorant Garamond', serif;font-weight:500;font-size:29px;margin:32px 0 8px;line-height:1.15}
+#gate p{font-size:14px;color:rgba(244,239,228,.72);margin:0 0 22px}
+.step{font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin-top:34px}
+.pickrow{display:flex;justify-content:space-between;align-items:center;width:100%;text-align:left;
+ padding:17px 4px;border-bottom:1px solid rgba(244,239,228,.22);font-size:17px}
+.pickrow .sub{display:block;font-size:12px;color:rgba(244, 239, 227, .55);margin-top:2px}
+.pickrow .arw{color:var(--gold); font-size:15px}
+.langpick{margin-top:18px;display:inline-flex;align-items:center;gap:9px;padding:9px 14px;border: 1px solid rgba(244,239,228,.34);font-size:12.5px;font-weight:500;color:var(--cream)}
+.langpick .globe{font-size:14px; opacity:.75}
+.langpick .car{font-size:9px; opacity:.65;margin-left:2px}
+.opt{display:block;width:100%;text-align:left;padding:15px 16px;border:1px solid rgba(244,239,228,.3);margin-bottom:9px;font-size:15px;font-weight:500}
+.opt[aria-pressed="true"]{background:var(--cream);color:var(--navy);border-color:var(--cream)}
+.alist{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.alist button{padding:9px 13px;border:1px solid rgba(244,239,228,.3);font-size:13.5px}
+.alist button[aria-pressed="true"]{background:var(--gold);color:var(--navy-deep);border-color:var(--gold);font-weight:600}
+#gate textarea{width:100%;margin-top:12px;background:rgba(244,239,228,.08);border:1px solid rgba(244,239,228,.3);color:var(--cream);padding:12px;min-height:74px;resize:vertical}
+#gate textarea::placeholder{color:rgba(244,239,228,.45)}
+.gerr{color:var(--gold);font-size:13px;margin-top:14px}
+#gate .go{width:100%;margin-top:22px;padding:16px;background:var(--cream);color:var(--navy);font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase}
+#gate .go:disabled{opacity:.4}
+.sec{margin-top:26px}
+.sec .lbl{font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+ 
+header{background:var(--navy);color:var(--cream);padding:24px 0 20px}
+.brand{font-family:'Cormorant Garamond',serif;font-size:32px;line-height:1}
+.brand small{display:block;font-family:Inter;font-size:9px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);margin-top:5px}
+.hrow{display:flex;justify-content:space-between;align-items:flex-start;gap:14px}
+.umb{text-align:right}
+.umb .lbl{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+.umb .nrow{display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-top:4px}
+.umb .n{font-family:'Cormorant Garamond',serif;font-size:29px;line-height:1}
+.ubr{width:22px;height:22px;flex:0 0 auto;fill:var(--gold);stroke:var(--gold);opacity:.95}
+.allergybar{margin-top:16px;padding:11px 13px;border:1px solid rgba(201,178,133,.5);font-size:12px;color:rgba(244,239,228,.86);display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.allergybar button{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);white-space:nowrap}
+ 
+.meter{background:var(--navy-deep);color:var(--cream);padding:13px 0}
+.meter .r{display:flex;justify-content:space-between;align-items:baseline;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase}
+.meter .v{font-family:'Cormorant Garamond',serif;font-size:20px;letter-spacing:0;text-transform:none}
+.track{height:2px;background:rgba(244,239,228,.22);margin-top:9px}
+.fill{height:100%;width:0;background:var(--gold);transition:width .4s ease}
+.meter small{display:block;font-size:12px;color:rgba(244,239,228,.6);margin-top:8px;text-transform:none;letter-spacing:0}
+ 
+.tabs{position:sticky;top:0;z-index:30;background:var(--cream);border-bottom:1px solid var(--line);overflow-x:auto}
+.tabs .inner{display:flex;gap:20px;padding:0 20px;max-width:560px;margin:0 auto;white-space:nowrap}
+.tabs button{padding:14px 0;font-size:11px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);border-bottom:2px solid transparent}
+.tabs button[aria-current="true"]{color:var(--navy);border-bottom-color:var(--navy)}
+ 
+h2{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:25px;margin:28px 0 2px}
+.filters{display:flex;gap:7px;flex-wrap:wrap;margin-top:16px}
+.filters button{padding:8px 13px;border:1px solid var(--line);font-size:11.5px;font-weight:600;letter-spacing:.08em;color:var(--muted)}
+.filters button[aria-pressed="true"]{background:var(--navy);color:var(--cream);border-color:var(--navy)}
+.fnone{padding:34px 4px;color:var(--muted);font-size:13.5px;text-align:center}
+.subhead{font-size:10.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin:24px 0 0;padding-bottom:7px;border-bottom:1px solid var(--line)}
+.item{display:flex;gap:12px;align-items:baseline;padding:13px 0;border-bottom:1px solid var(--line)}
+.item .b{flex:1;min-width:0}
+.nm{font-size:15.5px;font-weight:500}
+.tag{font-size:9px;font-weight:600;letter-spacing:.08em;color:var(--gold);border:1px solid var(--gold);padding:1px 4px;margin-left:5px;vertical-align:1px}
+.tag.alert{color:var(--warn);border-color:var(--warn)}
+.de{font-size:13px;color:var(--muted);margin-top:2px}
+.pr{font-family:'Cormorant Garamond',serif;font-size:17px;white-space:nowrap}
+.add{width:36px;height:36px;flex:0 0 auto;border:1px solid var(--navy);border-radius:50%;display:grid;place-items:center;font-size:19px;line-height:1}
+.add:active{transform:scale(.9)}
+.qty{font-size:12.5px;font-weight:600;color:var(--navy);min-width:16px;text-align:center}
+ 
+.card{background:var(--paper);border:1px solid var(--line);padding:18px;margin-top:26px}
+.card p{margin:0 0 14px;font-size:13.5px;color:var(--muted)}
+.wide{width:100%;padding:13px;border:1px solid var(--navy);font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase}
+.wide:disabled{opacity:.5}
+.wide.nudge{border-color:var(--warn);color:var(--warn)}
+.timer{font-family:'Cormorant Garamond',serif;font-size:30px;text-align:center;margin:4px 0 12px}
+.tabrow{display:flex;justify-content:space-between;font-size:14px;padding:5px 0;gap:12px}
+.tabrow .q{color:var(--muted);font-weight:600}
+.tabrow .o{display:block;font-size:12px;color:var(--muted)}
+.tabrow.sur{color:var(--warn)}
+.tabrow.sur .o{color:var(--warn);opacity:.8}
+.tot{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--navy);margin-top:12px;padding-top:12px}
+.tot span:last-child{font-family:'Cormorant Garamond',serif;font-size:26px}
+.remain{margin-top:9px;font-size:11.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.remain.met{color:var(--navy)}
+.note{font-size:12.5px;color:var(--muted);margin-top:12px}
+ 
+#langsheet{position:fixed;inset:0;z-index:110;background:rgba(26,36,64,.55);display:flex;align-items:flex-end}
+#langsheet .pane{background:var(--paper);width:100%;max-width:560px;margin:0 auto;max-height:80vh;overflow-y:auto;padding:22px 20px calc(24px + env(safe-area-inset-bottom))}
+#langsheet h3{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:25px;margin:0 0 6px}
+.lrow{display:flex;justify-content:space-between;align-items:center;width:100%;text-align:left;padding:15px 0;border-bottom:1px solid var(--line);font-size:16px}
+.lrow .sub{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.lrow .mk{color:transparent;font-size:14px}
+.lrow[aria-pressed="true"]{font-weight:600}
+.lrow[aria-pressed="true"] .mk{color:var(--navy)}
+ 
+#sheet{position:fixed;inset:0;z-index:90;background:rgba(26,36,64,.55);display:flex;align-items:flex-end}
+#sheet .pane{background:var(--paper);width:100%;max-width:560px;margin:0 auto;max-height:88vh;overflow-y:auto;padding:22px 20px calc(24px + env(safe-area-inset-bottom))}
+#sheet h3{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:25px;margin:0}
+#sheet .sub{font-size:13px;color:var(--muted);margin-top:4px}
+.grp{margin-top:22px}
+.grp .gl{font-size:10.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);padding-bottom:8px;border-bottom:1px solid var(--line)}
+.grp .req{color:var(--warn)}
+.orow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);width:100%;text-align:left}
+.orow .ol{font-size:14.5px}
+.orow .op{font-size:13px;color:var(--muted);white-space:nowrap}
+.orow .mk{width:20px;height:20px;border:1px solid var(--navy);flex:0 0 auto;display:grid;place-items:center;font-size:12px;color:transparent}
+.orow[aria-pressed="true"] .mk{background:var(--navy);color:var(--cream)}
+.orow.rad .mk{border-radius:50%}
+#sheet textarea{width:100%;margin-top:10px;background:var(--cream);border:1px solid var(--line);padding:12px;min-height:66px;resize:vertical}
+.disc{margin-top:9px;font-size:12px;color:var(--warn);line-height:1.45}
+.water{margin-top:16px;padding:11px 13px;background:var(--cream);border-left:2px solid var(--gold);font-size:12.5px;color:var(--muted)}
+.sheetacts{display:flex;gap:9px;margin-top:24px}
+.sheetacts button{flex:1;padding:14px;font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--navy)}
+.sheetacts .prim{background:var(--navy);color:var(--cream)}
+.sheetacts .prim:disabled{opacity:.4}
+.stepper{display:flex;align-items:center;gap:16px;margin-top:20px}
+.stepper button{width:38px;height:38px;border:1px solid var(--navy);border-radius:50%;font-size:19px;display:grid;place-items:center}
+.stepper .n{font-family:'Cormorant Garamond',serif;font-size:24px;min-width:26px;text-align:center}
+ 
+.bar{position:fixed;left:0;right:0;bottom:env(safe-area-inset-bottom);padding:0 20px 16px;z-index:40;transform:translateY(150%);transition:transform .3s ease}
+.bar.up{transform:translateY(0)}
+.bar .in{max-width:520px;margin:0 auto;background:var(--navy);color:var(--cream);display:flex;justify-content:space-between;align-items:center;padding:15px 18px;box-shadow:0 8px 26px rgba(31,46,79,.32)}
+.bar .c{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase}
+.bar .g{font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.foot{font-size:11.5px;color:var(--muted);text-align:center;padding:30px 0 8px;line-height:1.6}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+ 
+<div id="gate"><div class="in">
+  <div class="bd">Seaside<small>Beach bar · demo</small></div>
+ 
+  <div id="g1">
+    <div class="step">1 / 2</div>
+    <h1>Language · Γλώσσα · Sprache</h1>
+    <div id="g1-list"></div>
+  </div>
+ 
+  <div id="g2" class="hidden">
+    <div class="step" id="g-step2">2 / 2</div>
+    <h1 id="g-title"></h1>
+    <p id="g-body"></p>
+    <button class="opt" id="g-none" aria-pressed="false"><span id="g-nonetxt"></span></button>
+    <button class="opt" id="g-some" aria-pressed="false"><span id="g-sometxt"></span></button>
+    <div class="sec hidden" id="g-panel">
+      <div class="lbl" id="g-pick"></div>
+      <div class="alist" id="g-list"></div>
+      <textarea id="g-other" rows="3"></textarea>
+    </div>
+    <div class="gerr hidden" id="g-err"></div>
+    <button class="go" id="g-go" disabled></button>
+    <button class="langpick" id="glangbtn"></button>
+  </div>
+</div></div>
+ 
+<header>
+  <div class="wrap">
+    <div class="hrow">
+      <div class="brand">Seaside<small>Beach bar · demo</small></div>
+      <div class="umb">
+        <div class="lbl" id="t-umb">Umbrella</div>
+        <div class="nrow">
+          <svg class="ubr" viewBox="0 0 24 24" aria-hidden="true">
+            <g transform="rotate(-20 12 12)">
+              <path d="M12 12 L2 12 A10 10 0 0 1 3.34 7 Z"/>
+              <path d="M12 12 L7 3.34 A10 10 0 0 1 12 2 Z"/>
+              <path d="M12 12 L17 3.34 A10 10 0 0 1 20.66 7 Z"/>
+              <path d="M2 12 A10 10 0 0 1 22 12" fill="none" stroke-width="1.1" opacity=".5"/>
+            </g>
+            <path d="M12 12 v9.4" fill="none" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
+          <span class="n">605</span>
+        </div>
+      </div>
+    </div>
+    <button class="langpick" id="langbtn"></button>
+    <div class="allergybar"><span id="abtxt"></span><button id="abedit"></button></div>
+  </div>
+</header>
+ 
+<div class="meter"><div class="wrap">
+  <div class="r"><span id="t-min"></span><span class="v"><span id="spent">0</span> / 80 €</span></div>
+  <div class="track"><div class="fill" id="fill"></div></div>
+  <small id="t-minnote"></small>
+</div></div>
+ 
+<div class="tabs"><div class="inner" id="tabs"></div></div>
+ 
+<div class="wrap">
+  <div id="menu"></div>
+  <section class="card">
+    <p id="t-cleanp"></p>
+    <div id="cleanidle"><button class="wide" id="cleanbtn"></button></div>
+    <div id="cleanwait" class="hidden">
+      <div class="timer" id="ctimer">10:00</div>
+      <p style="text-align:center" id="t-conway"></p>
+      <button class="wide nudge hidden" id="nudgebtn"></button>
+    </div>
+  </section>
+  <section class="card hidden" id="tabcard">
+    <div style="font-size:10.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)" id="t-tab"></div>
+    <div id="lines" style="margin-top:12px"></div>
+    <div class="tot"><span id="t-tot"></span><span id="tottxt">0 €</span></div>
+    <div class="remain" id="remain"></div>
+    <p class="note" id="t-paynote"></p>
+  </section>
+  <p class="foot">Demo menu · not a real venue</p>
+</div>
+ 
+<div class="bar" id="orderbar"><div class="in">
+  <span class="c" id="cnt"></span>
+  <button class="g" id="send"></button>
+</div></div>
+ 
+<div id="langsheet" class="hidden"><div class="pane">
+  <h3 id="ls-title"></h3>
+  <div id="ls-list"></div>
+</div></div>
+ 
+<div id="sheet" class="hidden"><div class="pane">
+  <h3 id="sh-nm"></h3>
+  <div class="sub" id="sh-de"></div>
+  <div id="sh-groups"></div>
+  <div class="water hidden" id="sh-water"></div>
+  <div class="stepper"><button id="sh-minus">−</button><span class="n" id="sh-qty">1</span><button id="sh-plus">+</button></div>
+  <div class="sheetacts">
+    <button id="sh-cancel"></button>
+    <button class="prim" id="sh-add"></button>
+  </div>
+</div></div>
+ 
+<script src="menu-data.js"></script>
+<script>
+// The app: language and allergy screens, menu, item options, order, tab, minimum spend.
+const tx=v=>typeof v==='string'?v:(v[lang]||v.en);
+const tx0=v=>typeof v==='string'?v:v.en;
+ 
+let lang='en', sec='coffee', filt='all', cart=[], tab=[], seq=0;
+let allergy={set:false,none:false,list:[],other:''};
+let gateMode=null, gateSel=new Set(), sheet=null;
+const MIN=80;
+const $=id=>document.getElementById(id);
+const eur=n=>(Math.round(n*100)/100).toFixed(2).replace(/\.00$/,'')+' €';
+ 
+const IDX={};
+Object.keys(M).forEach(sk=>M[sk].g.forEach(g=>g.i.forEach(r=>{
+  IDX[r[0]]={id:r[0],nm:r[1],de:r[2],p:r[3],x:r[4]||{},sec:sk};
+})));
+ 
+let CH=null; try{CH=new BroadcastChannel('beachbar');}catch(e){}
+const push=m=>{ if(CH) CH.postMessage(m); };
+if(CH) CH.onmessage=e=>{
+  const m=e.data;
+  if(m&&m.kind==='charge'&&m.umbrella===605&&m.amount>0){
+    const key='sur|'+m.lid;
+    if(tab.find(x=>x.key===key))return;
+    tab.push({key,id:'sur',nm:'',q:1,price:m.amount,optLabels:[],note:m.note||'',noteShow:m.note||'',sur:1});
+    tabUI();
+  }
+};
+ 
+/* ---------- language ---------- */
+function pillHTML(){return `<span class="globe">\u2295</span><span>${LN[lang]}</span><span class="car">\u25BC</span>`;}
+function step1(){
+  $('g1-list').innerHTML=L.map(k=>
+    `<button class="pickrow" data-pick="${k}"><span>${LN[k]}<span class="sub">${LEN[k]}</span></span><span class="arw">\u2192</span></button>`).join('');
+}
+function openLangs(){
+  $('ls-title').textContent=UI[lang].langt;
+  $('ls-list').innerHTML=L.map(k=>
+    `<button class="lrow" data-glang="${k}" aria-pressed="${k===lang}">
+      <span>${LN[k]}${k!==lang?`<span class="sub">${LEN[k]}</span>`:''}</span><span class="mk">\u2713</span></button>`).join('');
+  $('langsheet').classList.remove('hidden'); document.body.style.overflow='hidden';
+}
+function closeLangs(){
+  $('langsheet').classList.add('hidden');
+  if($('gate').classList.contains('hidden')&&$('sheet').classList.contains('hidden')) document.body.style.overflow='';
+}
+$('langbtn').onclick=openLangs; $('glangbtn').onclick=openLangs;
+$('langsheet').addEventListener('click',e=>{if(e.target.id==='langsheet')closeLangs();});
+ 
+/* ---------- gate ---------- */
+function gateRender(){
+  const t=UI[lang];
+  $('glangbtn').innerHTML=pillHTML();
+  $('g-title').textContent=t.gtitle; $('g-body').textContent=t.gbody;
+  $('g-nonetxt').textContent=t.gnone; $('g-sometxt').textContent=t.gsome;
+  $('g-pick').textContent=t.gpick; $('g-other').placeholder=t.gother;
+  $('g-go').textContent=t.ggo; $('g-err').textContent=t.gerr;
+  $('g-list').innerHTML=ALLERGENS.map(a=>
+    `<button data-al="${a[0]}" aria-pressed="${gateSel.has(a[0])}">${tx(a[1])}</button>`).join('');
+  $('g-none').setAttribute('aria-pressed',gateMode==='none');
+  $('g-some').setAttribute('aria-pressed',gateMode==='some');
+  $('g-panel').classList.toggle('hidden',gateMode!=='some');
+  $('g-go').disabled=!(gateMode==='none'||(gateMode==='some'&&(gateSel.size||$('g-other').value.trim())));
+}
+$('g-none').onclick=()=>{gateMode='none';gateSel.clear();$('g-other').value='';$('g-err').classList.add('hidden');gateRender();};
+$('g-some').onclick=()=>{gateMode='some';gateRender();};
+$('g-other').addEventListener('input',gateRender);
+$('g-go').onclick=()=>{
+  if(gateMode==='some'&&!gateSel.size&&!$('g-other').value.trim()){$('g-err').classList.remove('hidden');return;}
+  allergy={set:true,none:gateMode==='none',
+    list:ALLERGENS.filter(a=>gateSel.has(a[0])).map(a=>a[1].en),other:$('g-other').value.trim()};
+  $('gate').classList.add('hidden'); document.body.style.overflow=''; paint();
+};
+$('abedit').onclick=()=>{
+  gateMode=allergy.none?'none':'some';
+  $('g1').classList.add('hidden'); $('g2').classList.remove('hidden');
+  $('gate').classList.remove('hidden'); document.body.style.overflow='hidden';
+  gateRender(); window.scrollTo({top:0});
+};
+ 
+/* ---------- menu ---------- */
+function tabsHTML(){
+  $('tabs').innerHTML=Object.keys(M).map(k=>
+    `<button data-sec="${k}" aria-current="${k===sec}">${tx(M[k].t)}</button>`).join('');
+}
+const qtyOf=id=>cart.filter(c=>c.id===id).reduce((a,c)=>a+c.q,0);
+function servedAs(it){
+  const sg=(it.x.o||[]).find(g=>g.k==='serve');
+  if(sg) return sg.hasGlass?['glass','bottle']:['bottle'];
+  return [it.x.srv||'glass'];
+}
+function shownPrice(it){
+  const sg=(it.x.o||[]).find(g=>g.k==='serve');
+  if(sg&&filt==='bottle'){
+    const b=sg.o.find(o=>o.l.en.indexOf('Bottle')===0);
+    if(b) return b.abs;
+  }
+  return it.p;
+}
+function menuHTML(){
+  const s=M[sec], t=UI[lang];
+  const F={all:t.fAll,glass:t.fGlass,shot:t.fShot,bottle:t.fBottle};
+  const chips = s.filters ? `<div class="filters">`+s.filters.map(f=>
+      `<button data-filt="${f}" aria-pressed="${f===filt}">${F[f]}</button>`).join('')+`</div>` : '';
+  let body='', shown=0;
+  s.g.forEach(g=>{
+    const rows=g.i.filter(r=>filt==='all'||servedAs(IDX[r[0]]).includes(filt));
+    if(!rows.length) return;
+    shown+=rows.length;
+    body+=`<div class="subhead">${tx(g.t)}</div>`+rows.map(r=>{
+      const it=IDX[r[0]], q=qtyOf(r[0]);
+      const tags=(it.x.tag?`<span class="tag">${it.x.tag}</span>`:'')
+        +(it.x.frozen?`<span class="tag alert">${t.frozen}</span>`:'');
+      return `<div class="item"><div class="b"><div class="nm">${tx(it.nm)}${tags}</div>${it.de?`<div class="de">${tx(it.de)}</div>`:''}</div>
+        <div class="pr">${eur(shownPrice(it))}</div><span class="qty">${q||''}</span>
+        <button class="add" data-open="${r[0]}" aria-label="${tx(it.nm)}">+</button></div>`;
+    }).join('');
+  });
+  if(!shown) body=`<div class="fnone">${t.fNone}</div>`;
+  $('menu').innerHTML=`<h2>${tx(s.t)}</h2>`+chips+body;
+}
+function paintChrome(){
+  const t=UI[lang];
+  $('langbtn').innerHTML=pillHTML();
+  $('t-umb').textContent=t.umb; $('t-min').textContent=t.min; $('t-minnote').textContent=t.minnote;
+  $('t-cleanp').textContent=t.cleanp; $('t-tab').textContent=t.tab; $('t-tot').textContent=t.tot;
+  $('t-paynote').textContent=t.pay; $('send').textContent=t.send; $('t-conway').textContent=t.onway;
+  $('abedit').textContent=t.edit;
+  $('abtxt').textContent=allergy.none?t.abnone:t.absome+' '+[...allergy.list,allergy.other].filter(Boolean).join(', ');
+  if(!$('cleanbtn').disabled)$('cleanbtn').textContent=t.clean;
+  $('nudgebtn').textContent=t.nudge;
+  document.documentElement.lang=lang;
+}
+function cartUI(){
+  const n=cart.reduce((a,c)=>a+c.q,0), s=cart.reduce((a,c)=>a+c.price*c.q,0);
+  $('cnt').textContent=`${n} ${UI[lang].it} · ${eur(s)}`;
+  $('orderbar').classList.toggle('up',n>0);
+}
+function tabUI(){
+  const t=UI[lang];
+  $('tabcard').classList.toggle('hidden',!tab.length);
+  if(!tab.length)return;
+  $('lines').innerHTML=tab.map(c=>{
+    if(c.sur)return `<div class="tabrow sur"><span>${t.surch}${c.noteShow?`<span class="o">“${c.noteShow}” · ${t.surnote}</span>`:''}</span><span>${eur(c.price)}</span></div>`;
+    const sub=[...c.optLabels.map(tx),c.noteShow?('“'+c.noteShow+'”'):''].filter(Boolean).join(' · ');
+    return `<div class="tabrow"><span><span class="q">${c.q}×</span> ${tx(c.nm)}${sub?`<span class="o">${sub}</span>`:''}</span><span>${eur(c.price*c.q)}</span></div>`;
+  }).join('');
+  const tot=tab.reduce((a,c)=>a+c.price*c.q,0);
+  $('tottxt').textContent=eur(tot); $('spent').textContent=Math.round(tot);
+  $('fill').style.width=Math.min(100,tot/MIN*100)+'%';
+  const left=MIN-tot, r=$('remain');
+  r.classList.toggle('met',left<=0);
+  r.textContent=left<=0?t.met:eur(left)+' '+t.togo;
+}
+function paint(){paintChrome();tabsHTML();menuHTML();cartUI();tabUI();}
+ 
+/* ---------- option sheet ---------- */
+function openSheet(id){
+  const it=IDX[id], t=UI[lang], presets=M[it.sec].rq||[];
+  sheet={id,q:1,sel:{},rq:[],note:''};
+  (it.x.o||[]).forEach(g=>{sheet.sel[g.k]=g.type==='many'?[]:(g.req?null:0);});
+  $('sh-nm').textContent=tx(it.nm); $('sh-de').textContent=it.de?tx(it.de):'';
+  $('sh-water').classList.toggle('hidden',!it.x.w); $('sh-water').textContent=t.water;
+  $('sh-groups').innerHTML=(it.x.o||[]).map(g=>
+    `<div class="grp"><div class="gl">${t[g.t]||g.t}${g.req?` <span class="req">· ${t.req}</span>`:''}</div>`
+    +g.o.map((o,i)=>{
+       const extra=o.abs!==undefined?eur(o.abs):(o.p?('+ '+eur(o.p)):'');
+       return `<button class="orow ${g.type==='one'?'rad':''}" data-g="${g.k}" data-i="${i}" aria-pressed="false">
+         <span class="ol">${tx(o.l)}</span><span class="op">${extra}</span><span class="mk">✓</span></button>`;
+     }).join('')+`</div>`).join('')
+    +`<div class="grp"><div class="gl">${t.reqs}</div>`
+    +presets.map((p,i)=>`<button class="orow" data-rq="${i}" aria-pressed="false">
+       <span class="ol">${tx(p)}</span><span class="op"></span><span class="mk">✓</span></button>`).join('')
+    +`<textarea id="sh-note" rows="2" placeholder="${t.reqph}"></textarea>
+      <div class="disc">${t.reqdisc}</div></div>`;
+  $('sh-qty').textContent='1'; $('sh-cancel').textContent=t.cancel;
+  const n=$('sh-note'); if(n) n.addEventListener('input',e=>{sheet.note=e.target.value;});
+  $('sheet').classList.remove('hidden'); document.body.style.overflow='hidden';
+  sheetPrice();
+}
+function sheetPrice(){
+  const it=IDX[sheet.id]; let base=it.p, add=0, ok=true;
+  (it.x.o||[]).forEach(g=>{
+    const v=sheet.sel[g.k];
+    if(g.type==='many'){(v||[]).forEach(i=>add+=g.o[i].p||0);}
+    else if(v===null){if(g.req)ok=false;}
+    else{const o=g.o[v]; if(o.abs!==undefined)base=o.abs; else add+=o.p||0;}
+  });
+  sheet.price=base+add;
+  $('sh-add').disabled=!ok;
+  $('sh-add').textContent=`${UI[lang].add} · ${eur(sheet.price*sheet.q)}`;
+}
+$('sh-plus').onclick=()=>{sheet.q++;$('sh-qty').textContent=sheet.q;sheetPrice();};
+$('sh-minus').onclick=()=>{if(sheet.q>1){sheet.q--;$('sh-qty').textContent=sheet.q;sheetPrice();}};
+$('sh-cancel').onclick=()=>{$('sheet').classList.add('hidden');document.body.style.overflow='';sheet=null;};
+$('sh-add').onclick=()=>{
+  const it=IDX[sheet.id], presets=M[it.sec].rq||[], labels=[];
+  (it.x.o||[]).forEach(g=>{
+    const v=sheet.sel[g.k];
+    if(g.type==='many'){(v||[]).forEach(i=>labels.push(g.o[i].l));}
+    else if(v!==null&&v!==undefined){ if(!(v===0&&(g.k==='side'||g.k==='milk'||g.k==='ice'))) labels.push(g.o[v].l); }
+  });
+  const free=sheet.note.trim();
+  const noteEn=[...sheet.rq.map(i=>presets[i].en), free?`[${LEN[lang]}] ${free}`:''].filter(Boolean).join('; ');
+  const noteShow=[...sheet.rq.map(i=>tx(presets[i])),free].filter(Boolean).join('; ');
+  const key=sheet.id+'|'+JSON.stringify(sheet.sel)+'|'+JSON.stringify(sheet.rq.slice().sort())+'|'+free;
+  const ex=cart.find(c=>c.key===key);
+  if(ex) ex.q+=sheet.q;
+  else cart.push({key,id:sheet.id,nm:it.nm,q:sheet.q,price:sheet.price,optLabels:labels,
+    note:noteEn,noteShow,free:!!free,freeLang:LEN[lang]});
+  $('sheet').classList.add('hidden'); document.body.style.overflow=''; sheet=null;
+  menuHTML(); cartUI();
+};
+ 
+document.addEventListener('click',e=>{
+  const p=e.target.closest('[data-pick]');
+  if(p){lang=p.dataset.pick;$('g1').classList.add('hidden');$('g2').classList.remove('hidden');
+    gateRender();paint();window.scrollTo({top:0});return;}
+  const g=e.target.closest('[data-glang]');
+  if(g){lang=g.dataset.glang;closeLangs();gateRender();paint();return;}
+  const a=e.target.closest('[data-al]');
+  if(a){const k=a.dataset.al;gateSel.has(k)?gateSel.delete(k):gateSel.add(k);$('g-err').classList.add('hidden');gateRender();return;}
+  const o=e.target.closest('[data-open]');
+  if(o){openSheet(o.dataset.open);return;}
+  const rq=e.target.closest('[data-rq]');
+  if(rq&&sheet){const i=+rq.dataset.rq,at=sheet.rq.indexOf(i);
+    at>-1?sheet.rq.splice(at,1):sheet.rq.push(i);
+    rq.setAttribute('aria-pressed',at===-1);return;}
+  const r=e.target.closest('.orow[data-g]');
+  if(r&&sheet){
+    const it=IDX[sheet.id],grp=(it.x.o||[]).find(x=>x.k===r.dataset.g),i=+r.dataset.i;
+    if(grp.type==='many'){const arr=sheet.sel[grp.k],at=arr.indexOf(i);at>-1?arr.splice(at,1):arr.push(i);}
+    else sheet.sel[grp.k]=i;
+    document.querySelectorAll(`.orow[data-g="${grp.k}"]`).forEach(b=>{
+      const bi=+b.dataset.i;
+      b.setAttribute('aria-pressed',grp.type==='many'?sheet.sel[grp.k].includes(bi):sheet.sel[grp.k]===bi);
+    });
+    sheetPrice();return;}
+  const f=e.target.closest('[data-filt]');
+  if(f){filt=f.dataset.filt;menuHTML();return;}
+  const s=e.target.closest('[data-sec]');
+  if(s){sec=s.dataset.sec;filt='all';tabsHTML();menuHTML();window.scrollTo({top:0});}
+});
+ 
+$('send').onclick=()=>{
+  if(!cart.length)return;
+  seq++;
+  push({kind:'order',umbrella:605,n:'605-'+seq,time:new Date().toISOString(),guestLang:LEN[lang],
+    allergy:allergy.none?null:{list:allergy.list,other:allergy.other,lang:LEN[lang]},
+    lines:cart.map((c,i)=>({lid:'605-'+seq+'-'+i,q:c.q,name:tx0(c.nm),
+      opts:c.optLabels.map(tx0),note:c.note,free:c.free,freeLang:c.freeLang}))});
+  cart.forEach(c=>{const ex=tab.find(x=>x.key===c.key);if(ex)ex.q+=c.q;else tab.push(Object.assign({},c));});
+  cart=[];menuHTML();cartUI();tabUI();
+  $('send').textContent=UI[lang].sent;
+  setTimeout(()=>$('send').textContent=UI[lang].send,1600);
+};
+ 
+let cTimer=null,cEnd=0;
+function cTick(){
+  const left=Math.max(0,Math.round((cEnd-Date.now())/1000));
+  $('ctimer').textContent=String(Math.floor(left/60)).padStart(2,'0')+':'+String(left%60).padStart(2,'0');
+  if(left<=0){clearInterval(cTimer);$('nudgebtn').classList.remove('hidden');}
+}
+$('cleanbtn').onclick=()=>{
+  seq++;
+  push({kind:'clean',umbrella:605,n:'605-'+seq,time:new Date().toISOString()});
+  $('cleanidle').classList.add('hidden');$('cleanwait').classList.remove('hidden');
+  $('nudgebtn').classList.add('hidden');
+  cEnd=Date.now()+10*60*1000;cTick();cTimer=setInterval(cTick,1000);
+};
+$('nudgebtn').onclick=()=>{
+  seq++;
+  push({kind:'nudge',umbrella:605,n:'605-'+seq,time:new Date().toISOString()});
+  const b=$('nudgebtn');b.disabled=true;b.textContent=UI[lang].nudged;
+  setTimeout(()=>{$('cleanwait').classList.add('hidden');$('cleanidle').classList.remove('hidden');
+    b.disabled=false;b.textContent=UI[lang].nudge;b.classList.add('hidden');},4000);
+};
+ 
+document.body.style.overflow='hidden';
+step1(); gateRender(); paint();
+</script>
+</body>
+</html>
